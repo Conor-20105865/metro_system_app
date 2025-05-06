@@ -1,14 +1,14 @@
 package com.example.model;
-
 import java.util.*;
-
+import static com.example.model.Edge.*;
 
 public class Station {
 
     //Declare Variables
-    private String name;
-    private  double latitude;
-    private double longitude;
+    public final String name;
+    public final double latitude;
+    public final double longitude;
+    public final Map<Station, Edge>connections = new HashMap<>();
 
     //Create Constructor Class
     public Station(String name, double latitude, double longitude) {
@@ -19,8 +19,8 @@ public class Station {
 
     //
     public void connect(Station other, double distance, String line) {
-        connections.put(other, new Edge(this, other, distance, line));
+           Edge edge = new Edge(from, to, distance, line);
+           connections.put(edge);
     }
-
 
 }
