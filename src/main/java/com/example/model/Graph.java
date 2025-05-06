@@ -21,7 +21,7 @@ public class Graph {
             Station fromStation = getOrCreateStation(from, 0.0, 0.0);
             Station toStation = getOrCreateStation(to, 0.0, 0.0);
 
-            //fromStation and toStation are both used for bi-directional traversal
+            //fromStation and toStation are both used for bidirectional traversal
             fromStation.connect(toStation, dist, line);
             toStation.connect(fromStation, dist,line);
     }

@@ -1,7 +1,6 @@
 package com.example.model;
 import java.util.*;
 import static com.example.model.Edge.*;
-
 public class Station {
 
     //Declare Variables
@@ -17,9 +16,9 @@ public class Station {
            this.longitude = longitude;
     }
 
-    //
+
     public void connect(Station other, double distance, String line) {
-           Edge edge = new Edge(from, to, distance, line);
+           Edge edge = new Edge(other, this, distance, line);
            connections.put(other, edge);
     }
 
