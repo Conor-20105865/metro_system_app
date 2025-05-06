@@ -19,8 +19,7 @@ public class Station {
 
     //
     public void connect(Station other, double distance, String line) {
-           Edge edge = new Edge(from, to, distance, line);
-           connections.put(edge);
+        connections.put(other, new Edge(this, other, distance, line));
     }
 
 }
