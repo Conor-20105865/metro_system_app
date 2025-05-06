@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GraphTest {
 
-    public Graph graph;
+    public Graph graph = new Graph();
 
     @Test
     void getOrCreateStation() {
