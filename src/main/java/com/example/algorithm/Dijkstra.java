@@ -4,6 +4,7 @@ import com.example.model.*;
 import java.util.*;
 
 public class Dijkstra {
+
     public static List<Station> shortestPath(Graph graph, Station start, Station end, double penalty) {
         Map<Station, Double> distance = new HashMap<>();
         Map<Station, Station> prev = new HashMap<>();
