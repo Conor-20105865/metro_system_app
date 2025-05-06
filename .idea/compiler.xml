@@ -6,8 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Metro_System_App" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Metro_System_App" target="23" />
+    </bytecodeTargetLevel>
   </component>
 </project>
