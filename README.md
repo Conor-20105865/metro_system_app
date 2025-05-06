@@ -4,7 +4,7 @@ This is a simple Metro System implementation using JavaFX.
 
 ## Features
 * BFS - algo
-* * DFS - algo 
+*  DFS - algo 
 * Dijkstra -algo
 
 
