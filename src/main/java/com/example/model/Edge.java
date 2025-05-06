@@ -17,5 +17,21 @@ public class Edge {
            this.line = line;
     }
 
+    //Getters
+    public Station getFrom() {
+        return from;
+    }
+
+    public Station getTo() {
+        return to;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public String getLine() {
+        return line;
+    }
 }
 

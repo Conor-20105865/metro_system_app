@@ -19,11 +19,14 @@ class GraphTest {
     }
 
     @Test
-    void connectStations() {
-    }
-
-    @Test
     void get() {
+        Graph graph = new Graph();
 
+        graph.getOrCreateStation("Plunkett", 10.0, 20.0);
+        Station result = graph.get("Plunkett");
+
+        assertNotNull(result);
+        assertEquals("Plunkett", result.getName());
     }
+
 }

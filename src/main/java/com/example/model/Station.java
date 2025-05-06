@@ -16,6 +16,24 @@ public class Station {
            this.longitude = longitude;
     }
 
+    //Getters and Setters
+
+
+    public String getName() {
+        return name;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public Map<Station, Edge> getConnections() {
+        return connections;
+    }
 
     public void connect(Station other, double distance, String line) {
            Edge edge = new Edge(other, this, distance, line);
