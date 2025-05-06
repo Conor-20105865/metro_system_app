@@ -1,0 +1,4 @@
+--patch-module
+com.example.metro_system_app=_
+--add-reads
+com.example.metro_system_app=ALL-UNNAMED
