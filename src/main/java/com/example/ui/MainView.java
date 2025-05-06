@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import com.example.model.*;
 import com.example.algorithm.*;
+import com.example.model.Graph;
 
 import java.util.List;
 
