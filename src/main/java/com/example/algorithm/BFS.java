@@ -1,12 +1,11 @@
 package com.example.algorithm;
 
-import com.example.model.Graph;
 import com.example.model.Station;
-import com.example.model.*;
+
 import java.util.*;
 
 public class BFS {
-    public static List<Station> findShortestPath(Graph graph, Station start, Station end) {
+    public static List<Station> findShortestPath() {
         Map<Station, Station> parentMap = new HashMap<>();
         Queue<Station> queue = new LinkedList<>();
         Set<Station> visited = new HashSet<>();
