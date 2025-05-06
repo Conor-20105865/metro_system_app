@@ -7,7 +7,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 class StationTest {
-
+//bin
     @Test
     void connect() {
         Station s1 = new Station("Alpha", 0.0, 0.0);
