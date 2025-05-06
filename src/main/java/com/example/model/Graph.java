@@ -26,4 +26,7 @@ public class Graph {
             toStation.connect(fromStation, dist,line);
     }
 
+    public Station get(String name) {
+        return stations.get(name);
+    }
 }
