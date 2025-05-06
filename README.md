@@ -3,14 +3,13 @@
 This is a simple Metro System implementation using JavaFX.
 
 ## Features
-* none
+* BFS - algo
+* * DFS - algo 
+* Dijkstra -algo
 
 
 ## TODO
 
-* BFS - algo
-* DFS - algo 
-* Dijkstra -algo
 * Selected route output as text
 * Selected route shown on map
 * Checkboxes for station select
