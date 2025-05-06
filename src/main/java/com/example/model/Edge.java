@@ -5,7 +5,7 @@ public class Edge {
     //Declare Variables
     private static Station from;
     private static Station to;
-    private static double distance
+    private static double distance;
     private static String line;
 
     //Edge Class Constructor

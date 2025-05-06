@@ -2,11 +2,12 @@ package com.example.model;
 
 import java.util.*;
 
+
 public class Station {
 
     //Declare Variables
     private String name;
-    private double latitude;
+    private  double latitude;
     private double longitude;
 
     //Create Constructor Class
@@ -18,8 +19,7 @@ public class Station {
 
     //
     public void connect(Station other, double distance, String line) {
-           Edge edge = new Edge(from, to, distance, line);
-           connections.put(edge);
+        connections.put(other, new Edge(this, other, distance, line));
     }
 
 

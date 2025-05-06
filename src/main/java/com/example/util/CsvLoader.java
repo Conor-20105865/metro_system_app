@@ -9,12 +9,19 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Utility class responsible for loading U-Bahn stations and connections from a CSV file
+ * and creating a graph representation of the network.
+ */
 public class CsvLoader {
-    // Placeholder lat/lon - you can enhance with real coordinates later
+
+    // Map storing dummy coordinates for stations (can be replaced with real data)
     private static final Map<String, double[]> dummyCoordinates = new HashMap<>();
 
+    // Static block to populate dummyCoordinates with hardcoded values
     static {
-        // If you know actual coordinates, replace here
+        // Station name mapped to latitude and longitude
+        // These are approximations and can be replaced with actual coordinates
         dummyCoordinates.put("Aderklaaer Straße", new double[]{48.2731, 16.4342});
         dummyCoordinates.put("Alaudagasse", new double[]{48.1425, 16.3730});
         dummyCoordinates.put("Alser Straße", new double[]{48.2186, 16.3452});
@@ -116,33 +123,48 @@ public class CsvLoader {
         // ... add more as needed
     }
 
+    /**
+     * Reads the CSV file, constructs the graph by adding stations and edges.
+     * @param path the path to the CSV file
+     * @return the populated graph
+     */
     public static Graph loadGraphFromCsv(String path) {
         Graph graph = new Graph();
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             String line;
-            reader.readLine(); // skip header
+            reader.readLine(); // Skip CSV header line
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length < 4) continue;
-                String from = parts[0].trim();
-                String to = parts[1].trim();
-                String lineName = "U" + parts[2].trim();
+                if (parts.length < 4) continue; // Ignore malformed lines
 
+                String from = parts[0].trim();       // Station A
+                String to = parts[1].trim();         // Station B
+                String lineName = "U" + parts[2].trim(); // Line number with prefix "U"
+
+                // Get coordinates or default to (0,0)
                 double[] fromCoords = dummyCoordinates.getOrDefault(from, new double[]{0, 0});
                 double[] toCoords = dummyCoordinates.getOrDefault(to, new double[]{0, 0});
 
+                // Create or get existing stations from the graph
                 Station fromStation = graph.getOrCreateStation(from, fromCoords[0], fromCoords[1]);
                 Station toStation = graph.getOrCreateStation(to, toCoords[0], toCoords[1]);
 
+                // Compute the distance using Euclidean formula
                 double distance = euclidean(fromCoords[0], fromCoords[1], toCoords[0], toCoords[1]);
+
+                // Connect the stations in the graph with edge weight and line label
                 graph.connectStations(from, to, distance, lineName);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Print error if file read fails
         }
-        return graph;
+        return graph; // Return the fully constructed graph
     }
 
+    /**
+     * Calculates Euclidean distance between two geographic points.
+     * Used as a simple distance metric for graph edge weights.
+     */
     private static double euclidean(double lat1, double lon1, double lat2, double lon2) {
         return Math.sqrt(Math.pow(lat1 - lat2, 2) + Math.pow(lon1 - lon2, 2));
     }
