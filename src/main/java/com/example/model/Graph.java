@@ -5,7 +5,7 @@ import java.util.*;
 public class Graph {
 
     //Create new Hash Map to store all stations
-    public Map<String, Station> stations;
+    public Map<String, Station> stations = new HashMap<>();
 
     public Station getOrCreateStation(String name, double lat, double lon) {
            Station station = stations.get(name); //Get current station
