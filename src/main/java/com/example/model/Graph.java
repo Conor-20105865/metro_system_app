@@ -18,12 +18,12 @@ public class Graph {
     }
 
     public void connectStations(String from, String to, double dist, String line) {
-            Station fromStation = getOrCreateStation(from, 0.0, 0.0);
-            Station toStation = getOrCreateStation(to, 0.0, 0.0);
-
-            //fromStation and toStation are both used for bidirectional traversal
-            fromStation.connect(toStation, dist, line);
-            toStation.connect(fromStation, dist,line);
+        Station s1 = stations.get(from);
+        Station s2 = stations.get(to);
+        if (s1 != null && s2 != null) {
+            s1.connect(s2, dist, line);
+            s2.connect(s1, dist, line);
+        }
     }
 
     public Station get(String name) {

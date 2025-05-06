@@ -1,5 +1,6 @@
 package com.example.algorithm;
 
+import com.example.model.Graph;
 import com.example.model.Station;
 
 import java.util.*;
@@ -10,11 +11,12 @@ public class BFS {
      * Finds the shortest path between two stations using Breadth-First Search (BFS).
      * This method assumes all edges have equal weight (i.e., unweighted shortest path).
      *
+     * @param graph
      * @param start The starting station.
      * @param end   The destination station.
      * @return A list of stations representing the shortest path from start to end.
      */
-    public static List<Station> findShortestPath(Station start, Station end) {
+    public static List<Station> findShortestPath(Graph graph, Station start, Station end) {
         Map<Station, Station> parentMap = new HashMap<>(); // Maps each station to its predecessor
         Queue<Station> queue = new LinkedList<>();         // Queue for BFS traversal
         Set<Station> visited = new HashSet<>();            // Set of visited stations to avoid revisiting
