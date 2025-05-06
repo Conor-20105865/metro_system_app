@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GraphTest {
 
-    public Graph graph = new Graph();
-
     @Test
     void getOrCreateStation() {
+        Graph graph = new Graph();
+
         Station station1 = graph.getOrCreateStation("Central", 40.0,-73.0);
         Station station2 = graph.getOrCreateStation("Central", 40.0,-73.0);
 
