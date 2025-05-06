@@ -12,14 +12,18 @@ public class Graph {
            //If station is null create a new station
            if (station == null) {
                station = new Station(name, lat, lon); //Create the new station
-               station.put(name, station);
+               stations.put(name, station);
            }
            return station; // Return back station
     }
 
     public void connectStations(String from, String to, double dist, String line) {
+            Station fromStation = getOrCreateStation(from, 0.0, 0.0);
+            Station toStation = getOrCreateStation(to, 0.0, 0.0);
 
-
+            //fromStation and toStation are both used for bi-directional traversal
+            fromStation.connect(toStation, dist, line);
+            toStation.connect(fromStation, dist,line);
     }
 
 }
