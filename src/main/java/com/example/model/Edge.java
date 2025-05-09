@@ -2,22 +2,22 @@ package com.example.model;
 
 public class Edge {
 
-    //Declare Variables
-    public Station from;
-    public Station to;
-    public double distance;
+    // Variables to represent the connection between two stations
+    public Station from;      // The station the edge starts from
+    public Station to;        // The station the edge goes to
+    public double distance;   // Distance between the two stations
+    public String line;       // The line (e.g., U1, U2) this edge belongs to
 
-    public String line;
-
-    //Edge Class Constructor
+    // Constructor for creating an edge between two stations
     public Edge(Station from, Station to, double distance, String line) {
-           this.from = from;
-           this.to = to;
-           this.distance = distance;
-           this.line = line;
+        this.from = from;           // Set the 'from' station
+        this.to = to;               // Set the 'to' station
+        this.distance = distance;   // Set the distance
+        this.line = line;           // Set the line name
     }
 
-    //Getters
+    // Getter methods to access edge information
+
     public Station getFrom() {
         return from;
     }
@@ -34,4 +34,3 @@ public class Edge {
         return line;
     }
 }
-

@@ -10,74 +10,87 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import com.example.model.*;
 import com.example.algorithm.*;
+
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MainView extends VBox {
-    // Dropdown boxes for selecting start and end stations
+
+    // === UI Components ===
     private final ComboBox<String> startComboBox = new ComboBox<>();
     private final ComboBox<String> endComboBox = new ComboBox<>();
+    private final ComboBox<String> avoidComboBox = new ComboBox<>();
     private final TextField penaltyField = new TextField("0");
-
-    // Output area for displaying route results
     private final TextArea resultArea = new TextArea();
 
-    // The graph representing the Vienna U-Bahn network, loaded from a CSV file
+    // Load the graph (subway map) from the CSV file
     private final Graph graph = CsvLoader.loadGraphFromCsv("src/data/vienna_subway.csv");
 
-    // Constructor: sets up the user interface
+    // === Constructor ===
     public MainView() {
-        setSpacing(10); // Vertical spacing between elements
-        setPadding(new Insets(15)); // Padding around the VBox
+        // Set layout spacing and padding
+        setSpacing(20);
+        setPadding(new Insets(20));
+        setStyle("-fx-background-color: #f0f8ff;"); // Light blue background
 
-        // Populate station lists in ComboBoxes
-        populateStationList();
+        populateStationList(); // Fill the combo boxes with station names
 
         // Title label
         Label title = new Label("Vienna U-Bahn Route Finder");
-        title.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        title.setStyle("-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+        title.setAlignment(Pos.CENTER);
 
-        // Adding the image at the top
-        Image image = new Image("file:src/main/resources/com/example/metro_system_app/map.png");
-        ImageView imageView = new ImageView(image);
-
-        // Set dimensions for the image
-        imageView.setFitHeight(300); // Adjusted height for better visibility
-        imageView.setFitWidth(300);
+        // Subway map image
+        ImageView imageView = new ImageView(new Image("file:src/main/resources/com/example/metro_system_app/map.png"));
+        imageView.setFitWidth(800);
         imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
 
-        // Wrapping the image view in an HBox to offset it to the right
-        HBox imageBox = new HBox(imageView);
-        imageBox.setPadding(new Insets(0, 0, 0, 50)); // Add padding to the left to shift the image right
-        imageBox.setAlignment(Pos.BASELINE_RIGHT); // Ensures alignment to the left center
+        StackPane imagePane = new StackPane(imageView);
+        imagePane.setStyle("-fx-border-color: #ccc; -fx-border-width: 2px; -fx-background-color: white;");
+        imagePane.setPadding(new Insets(10));
 
-        // GridPane for input fields
+        // Input section (start, end, avoid, penalty)
         GridPane inputGrid = new GridPane();
         inputGrid.setHgap(10);
         inputGrid.setVgap(10);
+        inputGrid.setPadding(new Insets(10));
+        inputGrid.setStyle("-fx-background-color: white; -fx-border-color: #ccc; -fx-border-width: 1px; -fx-background-radius: 10px;");
 
-        // Adding labels and dropdown lists to the grid
         inputGrid.add(new Label("Start Station:"), 0, 0);
         inputGrid.add(startComboBox, 1, 0);
         inputGrid.add(new Label("End Station:"), 0, 1);
         inputGrid.add(endComboBox, 1, 1);
         inputGrid.add(new Label("Line Change Penalty:"), 0, 2);
         inputGrid.add(penaltyField, 1, 2);
+        inputGrid.add(new Label("Station to Avoid:"), 0, 3);
+        inputGrid.add(avoidComboBox, 1, 3);
 
-        // Buttons to trigger each algorithm
+        // Route finding buttons
         Button bfsButton = new Button("Find Fewest Stops (BFS)");
         Button dijkstraButton = new Button("Shortest Route (Dijkstra)");
         Button dfsButton = new Button("All Routes (DFS)");
 
-        // Grouping buttons in a horizontal layout
-        HBox buttonRow = new HBox(10, bfsButton, dijkstraButton, dfsButton);
+        for (Button b : List.of(bfsButton, dijkstraButton, dfsButton)) {
+            b.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;");
+        }
 
-        // Setting up result display area
+        HBox buttonRow = new HBox(15, bfsButton, dijkstraButton, dfsButton);
+        buttonRow.setAlignment(Pos.CENTER);
+        buttonRow.setPadding(new Insets(10));
+
+        // Text area to show results
         resultArea.setEditable(false);
         resultArea.setPrefHeight(300);
+        resultArea.setStyle("-fx-control-inner-background: #ffffff; -fx-border-color: #ccc; -fx-border-width: 1px;");
 
-        // Adding all UI components to the main VBox
-        getChildren().addAll(imageBox, title, inputGrid, buttonRow, new Label("Results:"), resultArea);
+        VBox resultBox = new VBox(5, new Label("Results:"), resultArea);
+        resultBox.setPadding(new Insets(10));
+        resultBox.setStyle("-fx-background-color: white; -fx-border-color: #ccc; -fx-border-width: 1px; -fx-background-radius: 10px;");
+
+        // Add all UI elements to the main layout
+        getChildren().addAll(title, imagePane, inputGrid, buttonRow, resultBox);
 
         // Set button actions
         bfsButton.setOnAction(e -> findBFS());
@@ -85,21 +98,20 @@ public class MainView extends VBox {
         dfsButton.setOnAction(e -> findDFS());
     }
 
-    // Populates the station list in the ComboBoxes
+    // === Populates combo boxes with station names ===
     private void populateStationList() {
-        // Get station names from the graph and sort them in alphabetical order
         List<String> stationNames = graph.stations.values()
                 .stream()
                 .map(Station::getName)
                 .sorted()
                 .collect(Collectors.toList());
 
-        // Populate the ComboBoxes
         startComboBox.setItems(FXCollections.observableArrayList(stationNames));
         endComboBox.setItems(FXCollections.observableArrayList(stationNames));
+        avoidComboBox.setItems(FXCollections.observableArrayList(stationNames));
     }
 
-    // Finds the shortest path using BFS (fewest number of stops)
+    // === Finds a path using BFS (fewest stops) ===
     private void findBFS() {
         String startName = startComboBox.getValue();
         String endName = endComboBox.getValue();
@@ -111,15 +123,14 @@ public class MainView extends VBox {
 
         Station start = graph.get(startName);
         Station end = graph.get(endName);
-        if (start == null || end == null) {
-            resultArea.setText("Invalid stations specified.");
-            return;
-        }
-        List<Station> path = BFS.findShortestPath(graph, start, end);
+        Station avoid = graph.get(avoidComboBox.getValue());
+        Set<Station> avoidSet = (avoid != null) ? Set.of(avoid) : Set.of();
+
+        List<Station> path = BFS.findShortestPath(graph, start, end, avoidSet);
         displayPath(path);
     }
 
-    // Finds the shortest route by distance using Dijkstra's algorithm
+    // === Finds the shortest route using Dijkstra's algorithm ===
     private void findDijkstra() {
         String startName = startComboBox.getValue();
         String endName = endComboBox.getValue();
@@ -131,8 +142,10 @@ public class MainView extends VBox {
 
         Station start = graph.get(startName);
         Station end = graph.get(endName);
-        double penalty;
+        Station avoid = graph.get(avoidComboBox.getValue());
+        Set<Station> avoidSet = (avoid != null) ? Set.of(avoid) : Set.of();
 
+        double penalty;
         try {
             penalty = Double.parseDouble(penaltyField.getText());
         } catch (NumberFormatException e) {
@@ -140,16 +153,11 @@ public class MainView extends VBox {
             return;
         }
 
-        if (start == null || end == null) {
-            resultArea.setText("Invalid stations specified.");
-            return;
-        }
-
-        List<Station> path = Dijkstra.shortestPath(graph, start, end, penalty);
+        List<Station> path = Dijkstra.shortestPath(graph, start, end, penalty, avoidSet);
         displayPath(path);
     }
 
-    // Finds all possible routes using DFS
+    // === Finds all possible paths using DFS ===
     private void findDFS() {
         String startName = startComboBox.getValue();
         String endName = endComboBox.getValue();
@@ -161,12 +169,10 @@ public class MainView extends VBox {
 
         Station start = graph.get(startName);
         Station end = graph.get(endName);
-        if (start == null || end == null) {
-            resultArea.setText("Invalid stations specified.");
-            return;
-        }
+        Station avoid = graph.get(avoidComboBox.getValue());
+        Set<Station> avoidSet = (avoid != null) ? Set.of(avoid) : Set.of();
 
-        List<List<Station>> paths = DFS.findAllPaths(graph, start, end);
+        List<List<Station>> paths = DFS.findAllPaths(graph, start, end, avoidSet);
         StringBuilder sb = new StringBuilder();
         for (List<Station> path : paths) {
             sb.append(pathToString(path)).append("\n\n");
@@ -174,7 +180,7 @@ public class MainView extends VBox {
         resultArea.setText(sb.toString());
     }
 
-    // Displays a single path in the result area
+    // === Displays a single path (used for BFS and Dijkstra) ===
     private void displayPath(List<Station> path) {
         if (path == null || path.isEmpty()) {
             resultArea.setText("No route found.");
@@ -183,13 +189,8 @@ public class MainView extends VBox {
         resultArea.setText(pathToString(path));
     }
 
-    // Converts a list of stations into a readable string with arrows between them
+    // === Converts a path (list of stations) into a string like "A → B → C" ===
     private String pathToString(List<Station> path) {
-        StringBuilder sb = new StringBuilder();
-        for (Station s : path) {
-            sb.append(s.getName()).append(" → ");
-        }
-        if (sb.length() > 0) sb.setLength(sb.length() - 3); // Remove the last arrow
-        return sb.toString();
+        return path.stream().map(Station::getName).collect(Collectors.joining(" → "));
     }
 }
