@@ -1,0 +1,19 @@
+# Maven build output
+target/
+
+# Local Maven cache
+.m2/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
