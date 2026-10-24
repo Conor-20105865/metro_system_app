@@ -97,7 +97,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>your.package.MainApp</mainClass> <!-- CHANGE THIS -->
+                    <mainClass>com.example.metro_system_app.ViennaUbahnApp</mainClass>
                 </configuration>
             </plugin>
         </plugins>
